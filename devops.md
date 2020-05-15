@@ -12,7 +12,7 @@
 
 
 ## Outline architecture of the infrastructure
-![](path)
+![](OutlineArchitectureOfTheInfrastructure.png)
 
 
 ## Explain your decisions
