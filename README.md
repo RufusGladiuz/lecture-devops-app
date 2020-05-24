@@ -1,3 +1,6 @@
+## DevOps Sommer-Semester 2020
+Dieses Dokument gibt eine kurze Übersicht, über den Techstack, der Verwendet werden soll und gibt die Begründung für die Auswahl der einzellnen Komponenten an.
+
 ## Darstellung der CI/CD Architektur der Infrakstruktur.
 ![](OutlineArchitectureOfTheInfrastructure.png)
 
