@@ -1,83 +1,28 @@
-Lecture: DevOps - application
-=============================
+## DevOps Sommer-Semester 2020
+Dieses Dokument gibt eine kurze Übersicht, über den Techstack, der Verwendet werden soll und gibt die Begründung für die Auswahl der einzellnen Komponenten an.
 
+## Darstellung der CI/CD Architektur der Infrakstruktur.
+![](OutlineArchitectureOfTheInfrastructure.png)
 
-This repository contains the [application](./app/README.md) that should be used as *deployable workload* in the
-[exercise](https://github.com/lucendio/lecture-devops-material/blob/master/exercise.md) implementation.  
+## Auswahl und Begründung
+Wir verwenden...
 
+- **GitHub** - Kostenfrei, weitverbreitet und Erfahrungswerte vorhanden sind. Technisch sogrt Github für die Versionierung des Codes.
+- **Jenkins** - Da es Kostenfrei und weitverbreitet ist, sowie einen guten Community-Support und unbegrenzte Erweiterungsmöglichkeiten bietet. Jenkins biete die Möglichkeit einen CI/CD Process für die Applikation zu erstellen.
+- **Gulp** - Zum Scripten des Building-Processes.
+- **Mocha.js** - Bietet eine sehr einfache Implementierung und ist das gängie Test-Framework für Node.js ist. 
+- **Docker** - Unterstützt von den prominentesten CI-Lösungen, beschleunigt den Provisioningprozess.
+- **Buildah & podman** - Als eventuelle Alternative zu Docker.
+- **Cabot** - Self-Hosted, einfach zu deployen und alter service.
 
-### Getting started 
+## Erklärung des Autmomationsprocesses
 
-For more information regarding the app, please have a look into its [README](./app/README.md).
-
-The `Makefile` is the main entry point for this repository. It's meant to be used for documentation purposes and local
-development/invocation only. The following commands are available:
-
-*NOTE:*
-
-The `Makefile` is solely meant to showcase how to interact with the application and the code base, it is not recommended
-to invoke make targets from the CI/CD, but rather use automation-specific interfaces (e.g. `Jenkinsfile`, `.travis.yml`,
-etc.), which would then invoke logic also shown under some make target. 
-
-
-#### `make install-stack`
-
-* install technology stack (Nodejs, npm, MongoDB) as prebuild binaries locally within the project
-* in order for the application-related targets to pick up these binaries, the `PATH` variable is adjusted and exported
-  for the corresponding target
-
-
-#### `make install-deps`
-
-* install npm dependencies for server and client
-
-
-#### `make build`
-
-* start a local mongo database
-
-
-#### `make run-db`
-
-* start a local mongo database
-
-
-#### `make run-local`
-
-*NOTE: it might be desired to start a database first (e.g. `make run-db`)*
-
-* build client 
-* start server with development configuration
-
-
-#### `make test`
-
-*NOTE: requires MongoDB to be running (e.g. `make run-db`)*
-
-* run client tests in [CI mode](https://jestjs.io/docs/en/cli.html#--ci) (exits regardless of the test outcome; closed tty)
-* run server tests in [CI mode](https://jestjs.io/docs/en/cli.html#--ci) (exits regardless of the test outcome; closed tty)
-
-
-#### `make test-client-local`
-
-* run client tests
-
-
-#### `make build`
-
-* build client
-
-
-#### `make clean`
-
-* removes all dependencies that were installed locally 
-    * node, npm, mongo
-    * npm modules for server and client
-
-
-#### `make start`
-
-* start a MongoDB process with an explicit inline-configuration
-* start the application process with variables being set only visible to that invocation (as an alternative to the
-  environment configuration file `app/server/dev.env`)
-* block terminal to keep it as the output medium. To stop again, send a termination signal via `Ctrl+C`
+1. Die React App mit dem Jenkinsfile wird auf einen gesonderten "deploy" branch gepusht
+2. Jenkins horcht auf diesen Branch pulled diesen und liest das Jenkinsfile aus sobald ein update verfügbar ist
+3. Nach dem auslesen des Jenkinfiles startet Jenkins einen build
+4. Jenkins startet GULP, um die dependencies zu fetchen
+5. Jenkins startet Mocha.js und führt die Tests aus
+6. Sollte der Build failen wird der Entwickler informiert
+7. Ist der Build Succeded wird das Dockerfile im Projekt ausgelesen und ein Docker Container und Image erstellt
+8. Jenkins deployed die App auf Digital Ocean
+9. Cabot überprüft den status der Applikation auf Digital Ocean
