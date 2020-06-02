@@ -14,7 +14,7 @@
 ## Outline architecture of the infrastructure
 ![](OutlineArchitectureOfTheInfrastructure.png)
 
-
+//TEST
 ## Explain your decisions
 
 Wir verwenden...
