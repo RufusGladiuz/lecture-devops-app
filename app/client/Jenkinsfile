@@ -3,9 +3,8 @@ pipeline {
 
     stages {
         stage('Build') {
-            dir("app/client") {
-                steps {
-                    cd 'app/client'
+            steps {
+                dir("/app/client") {
                     sh 'npm install'
                 }
             }
