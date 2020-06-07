@@ -4,7 +4,8 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                dir("/app/client") {
+                dir("app/client") {
+                    sh 'pwd'
                     sh 'npm install'
                 }
             }
@@ -16,7 +17,7 @@ pipeline {
         }
         stage('Deploy') {
             steps {
-                echo 'Deploying....HIHI.dddd.asdasdasda'
+                echo 'Deploying....HIHI.dddd.asdasdasdasdadasda'
             }
         }
     }
