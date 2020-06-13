@@ -2,9 +2,17 @@ pipeline {
     agent any
 
     stages {
-        stage('Build') {
+        stage('Build-Client') {
             steps {
-                dir("app/client") {
+                dir("client") {
+                    sh 'pwd'
+                    sh 'npm install'
+                }
+            }
+        }
+        stage('Build-Server') {
+            steps {
+                dir("server") {
                     sh 'pwd'
                     sh 'npm install'
                 }
