@@ -20,7 +20,7 @@ pipeline {
         }
         stage('Test') {
             steps {
-                echo 'Testing.. hallo icib bin ein test adsasdsdaadsasda'
+                echo 'Testing.. hallo icib bin ein test adsasdsdaadsasdaasdasdasda'
                 //sh 'npm test'
             }
         }
