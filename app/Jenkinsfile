@@ -5,6 +5,7 @@ pipeline {
         stage('Build-Client') {
             steps {
                 dir("client") {
+                    sh "pwd"
                     sh 'npm install'
                 }
             }
@@ -12,6 +13,7 @@ pipeline {
         stage('Build-Server') {
             steps {
                 dir("server") {
+                    sh "pwd"
                     sh 'npm install'
                 }
             }
