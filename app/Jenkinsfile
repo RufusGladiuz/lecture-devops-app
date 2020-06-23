@@ -20,7 +20,7 @@ pipeline {
         }
         stage('Test') {
             steps {
-                echo 'Testing.. hallo icib bin ein test adsasdsdaadsasdasdasdasdasdaasdasdasda'
+                echo 'Starting Jest Tests'
                 dir("server") {
                     sh 'npm run test'
                 }
@@ -28,7 +28,7 @@ pipeline {
         }
         stage('Deploy') {
             steps {
-                echo 'Deploying....HIHI.dddd.asdadasdaa'
+                echo 'Deploying....'
             }
         }
     }
