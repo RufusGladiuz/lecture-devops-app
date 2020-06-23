@@ -22,7 +22,7 @@ pipeline {
             steps {
                 echo '--------------------------> Starting Jest Tests'
                 dir("server") {
-                    sh 'yarn test'
+                    sh 'npm run test'
                 }
             }
         }
