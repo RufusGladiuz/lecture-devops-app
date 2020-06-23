@@ -7,6 +7,7 @@ pipeline {
                 dir("client") {
                     sh "pwd"
                     sh 'npm install'
+                    sh 'npm init'
                 }
             }
         }
