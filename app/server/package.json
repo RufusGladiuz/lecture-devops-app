@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "start": "env-cmd -f ./dev.env nodemon src/index.js",
-    "test": "jest --ci",
+    "test": "jest --ci --config ./jest.config.js",
     "test:dev": "env-cmd -f ./dev.env jest"
   },
   "devDependencies": {
