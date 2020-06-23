@@ -6,7 +6,6 @@ pipeline {
             steps {
                 dir("client") {
                     sh "pwd"
-                    sh 'npm init'
                     sh 'npm install'
                 }
             }
