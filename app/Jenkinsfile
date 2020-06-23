@@ -22,8 +22,8 @@ pipeline {
             steps {
                 echo '--------------------------> Starting Jest Tests'
                 dir("server") {
-                    sh 'ls -a'
-                    sh 'npm run test:dev'
+                    sh 'ls -a -l'
+                    sh 'npm run test'
                 }
             }
         }
