@@ -2,15 +2,6 @@ pipeline {
     agent any
 
     stages {
-        stage('Git-Pull') {
-            steps {
-                dir("/..") {
-                    sh "pwd"
-                    sh 'git pull'
-                }
-            }
-        }
-
         stage('Build-Client') {
             steps {
                 dir("client") {
