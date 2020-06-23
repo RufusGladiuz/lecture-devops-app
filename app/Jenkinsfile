@@ -22,7 +22,7 @@ pipeline {
             steps {
                 echo '--------------------------> Starting Jest Tests'
                 dir("server") {
-                    sh 'jest --config ./jest.config.js --ci'
+                    sh 'yarn test'
                 }
             }
         }
