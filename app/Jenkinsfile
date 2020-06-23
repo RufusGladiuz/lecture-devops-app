@@ -22,7 +22,7 @@ pipeline {
             steps {
                 echo '--------------------------> Starting Jest Tests'
                 dir("server") {
-                    sh 'npm run test'
+                    sh 'jest --config ./jest.config.js --ci'
                 }
             }
         }
