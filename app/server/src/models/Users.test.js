@@ -1,3 +1,5 @@
+require('dotenv').config({ path: 'ENV_FILENAME' });
+
 const dbClientInstance_ = require( './../db/mongo.js' );
 
 const { model: Users } = require( './Users.js' );
