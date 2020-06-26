@@ -7,7 +7,7 @@ describe( 'Model: Users', ()=>{
         try{
             await dbClientInstance_;
         }catch( err ){
-            console.debug("Error")
+            console.warn("Error")
             console.error( new Error( `Cannot connect to database: ${ process.env.MONGODB_URL }` ) );
             process.exit( 1 );
         }
@@ -21,12 +21,12 @@ describe( 'Model: Users', ()=>{
             email: 'myname@example.com',
             password: 'mypassword'
         };
-        console.debug("Done")
+        console.warn("Done")
         const userDoc = await Users( userData );
         await userDoc.save();
-        console.debug("user Record")
+        console.warn("user Record")
         const userRecord = await Users.findOne({ email: userData.email });
-        console.debug("PW")
+        console.warn("PW")
         const { password, ...userInfo } = userData;
 
         expect( userRecord ).toEqual( expect.objectContaining( userInfo ) );
