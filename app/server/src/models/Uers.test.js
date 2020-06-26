@@ -1,3 +1,6 @@
+const dotenv = require("dotenv");
+dotenv.config();
+
 const dbClientInstance_ = require( './../db/mongo.js' );
 
 const { model: Users } = require( './Users.js' );
