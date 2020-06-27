@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 
 const mongooseInstance_ = mongoose.connect(
-    process.env.MONGODB_URL,
+    String(process.env.MONGODB_URL),
     {
         useNewUrlParser: true,
         useCreateIndex: true,
@@ -10,8 +10,8 @@ const mongooseInstance_ = mongoose.connect(
 
         useUnifiedTopology: true,
         heartbeatFrequencyMS: 1000 * 5,         // 1 sec * 5
-        serverSelectionTimeoutMS: 1000 * 10,     // 1 sec * 10
-        useNewUrlParser: true
+        serverSelectionTimeoutMS: 1000 * 10     // 1 sec * 10
+
     },
     // TODO: make use of the event emitter to indicate each retry in logs & to increase
     //       the overall timeout to 10 min (see https://mongoosejs.com/docs/connections.html#connection-events)
