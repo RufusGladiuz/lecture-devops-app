@@ -16,7 +16,7 @@ pipeline {
                     sh "pwd"
                     sh 'npm install'
                     sh 'npm install dotenv'
-                    sh 'npm audit fix'
+                    sh 'npm audit fix',
                 }
             }
         }
