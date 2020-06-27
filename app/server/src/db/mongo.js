@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-
+require('dotenv').config({ path: 'app/server/dev.env' });
 
 const mongooseInstance_ = mongoose.connect(
     String(process.env.MONGODB_URL),
