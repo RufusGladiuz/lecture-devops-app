@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-require('dotenv').config({ path: 'app/server/dev.env' });
+require('dotenv').config();
 
 const mongooseInstance_ = mongoose.connect(
     String(process.env.MONGODB_URL),
@@ -17,6 +17,8 @@ const mongooseInstance_ = mongoose.connect(
     //       the overall timeout to 10 min (see https://mongoosejs.com/docs/connections.html#connection-events)
     function( err ){
         if( typeof err !== 'undefined' && err !== null ){
+            console.log(process.env);
+            console.log('The value of PORT is:', process.env.PORT);
             console.error( new Error( `Cannot connect to database: ${ process.env.MONGODB_URL }` ) );
         }else{
             console.log( `Connect established to database: ${ process.env.MONGODB_URL }` );
