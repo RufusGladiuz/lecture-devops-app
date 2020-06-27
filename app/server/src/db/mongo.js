@@ -4,6 +4,7 @@ require('dotenv').config();
 require('dotenv').config({ path: path.join(process.env.WORKSPACE, "app", "server", "dev.env" ) });
 console.log("MongoDB Url ", process.env.MONGODB_URL);
 console.log(process.env);
+
 const mongooseInstance_ = mongoose.connect(
     process.env.MONGODB_URL,
     {
