@@ -25,7 +25,6 @@ describe( 'Model: Users', ()=>{
         await userDoc.save();
         const userRecord = await Users.findOne({ email: userData.email });
         const { password, ...userInfo } = userData;
-        console.log("HALLO ROUVEN",{ password, ...userInfo },userData)
 
         expect( userRecord ).toEqual( expect.objectContaining( userInfo ) );
     });

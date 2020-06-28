@@ -32,7 +32,7 @@ describe( 'Todos: Todos', ()=>{
         const todoRecord = await Todos.findOne({ email: todoData.user });
         console.warn("PW")
         const { description, ...todoInfo } = todoData;
-        console.log("HALLO ROUVEN",{ description, ...todoInfo },todoData)
+        console.log("HALLO ROUVEN",{ description, ...todoInfo },todoRecord)
         
         expect( todoRecord ).toEqual( expect.objectContaining( todoInfo ) );
     });
