@@ -7,6 +7,7 @@ console.log(process.env);
 
 
 const ip = process.env.JENKINS_URL.replace("http://","").split(":")[0]
+console.log(ip);
 
 const mongooseInstance_ = mongoose.connect(
     process.env.DEV_MONGODB_URL.replace("#ip", ip),
