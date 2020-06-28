@@ -3,7 +3,7 @@ const { model: Todos } = require( './Todos.js' );
 const mongoose = require('mongoose');
 
 
-describe( 'Todos: Users', ()=>{
+describe( 'Todos: Todos', ()=>{
     beforeAll( async ()=>{
         try{
             await dbClientInstance_;
@@ -31,6 +31,7 @@ describe( 'Todos: Users', ()=>{
         console.warn("todo Record")
         const todoRecord = await Todos.findOne({ email: todoData.user });
         console.warn("PW")
+        console.log("HALLO ROUVEN",{ description, ...todoInfo },todoData)
         const { description, ...todoInfo } = todoData;
 
         expect( todoRecord ).toEqual( expect.objectContaining( todoInfo ) );
