@@ -29,7 +29,7 @@ describe( 'Todos: Todos', ()=>{
         const todoDoc = await Todos( todoData );
         await todoDoc.save();
         console.warn("todo Record")
-        const todoRecord = await Todos.findOne({ email: todoData.user });
+        const todoRecord = await Todos.findOne({ user: todoData.user });
         console.warn("PW")
         const { description, ...todoInfo } = todoData;
         console.log("HALLO ROUVEN",{ description, ...todoInfo },todoRecord)
