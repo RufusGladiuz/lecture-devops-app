@@ -1,0 +1,21 @@
+version: '3.1'
+
+services:
+  mongo:
+    image: mongo
+    restart: always
+    ports:
+     - "8082:27017"
+    networks:
+     - devops_default
+  jenkins:
+    image: devops_image
+    environment:
+     - MONGODB_URL=mongo::8082
+    ports:
+     - "8081:8080"
+    networks:
+     - devops_default
+networks:
+  devops_default:
+    external: true
