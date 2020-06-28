@@ -21,12 +21,9 @@ describe( 'Model: Users', ()=>{
             email: 'myname@example.com',
             password: 'mypassword'
         };
-        console.warn("Done")
         const userDoc = await Users( userData );
         await userDoc.save();
-        console.warn("user Record")
         const userRecord = await Users.findOne({ email: userData.email });
-        console.warn("PW")
         const { password, ...userInfo } = userData;
 
         expect( userRecord ).toEqual( expect.objectContaining( userInfo ) );
@@ -34,10 +31,9 @@ describe( 'Model: Users', ()=>{
 
 
     afterAll( async ()=>{
-        console.warn("PW2")
-    //    const dbClient = await dbClientInstance_;
-    //    const { connection } = dbClient;
-    //    await connection.dropDatabase();
-    //    await dbClient.disconnect();
+        const dbClient = await dbClientInstance_;
+        const { connection } = dbClient;
+        await connection.dropDatabase();
+        await dbClient.disconnect();
     });
 });
