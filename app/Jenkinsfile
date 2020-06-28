@@ -12,18 +12,24 @@ pipeline {
         }
         stage('Build-Server') {
             steps {
+
                 dir("app/server") {
                     sh "pwd"
                     sh 'npm install'
                     sh 'npm install dotenv'
                     //sh 'npm audit fix'
                 }
+                //dir("app/server/python"){
+                //    sh 'python -m pip install -r requirments.txt'
+                //    sh 'python mongo.py'
+                //}
             }
         }
         stage('Test') {
             steps {
                 echo '--------------------------> Starting Jest Tests'
                 dir("app/server") {
+                    
                     sh 'npm run test'
                 }
             }
