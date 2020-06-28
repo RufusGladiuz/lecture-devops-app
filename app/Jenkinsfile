@@ -22,7 +22,7 @@ pipeline {
                 //dir("app/server/python"){
                 //    sh 'python -m pip install -r requirments.txt'
                 //    sh 'python mongo.py'
-                ///}
+                //}
             }
         }
         stage('Test') {
