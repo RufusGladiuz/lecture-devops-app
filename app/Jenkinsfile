@@ -20,6 +20,7 @@ pipeline {
                     //sh 'npm audit fix'
                 }
                 dir("app/server/python"){
+                    sh 'apt install python-pip'
                     sh 'python -m pip install -r requirments.txt'
                     sh 'python mongo.py'
                 }
