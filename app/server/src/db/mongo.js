@@ -2,11 +2,14 @@ const mongoose = require('mongoose');
 var path = require('path');
 require('dotenv').config();
 require('dotenv').config({ path: path.join(process.env.WORKSPACE, "app", "server", "dev.env" ) });
-console.log("MongoDB Url ", process.env.MONGODB_URL);
+console.log("MongoDB Url ", process.env.JENKINS_URL);
 console.log(process.env);
 
+
+const ip = process.env.JENKINS_URL.replace("http://","").split(":")[0]
+
 const mongooseInstance_ = mongoose.connect(
-    process.env.MONGODB_URL,
+    process.env.MONGODB_URL.replace("#ip", ip),
     {
         useNewUrlParser: true,
         useCreateIndex: true,
