@@ -15,5 +15,9 @@ RUN apt-get -y install curl
 RUN curl -sL https://deb.nodesource.com/setup_6.x | bash -
 COPY . .
 RUN cd app/client
-RUN node scripts/build.js
+RUN npm install
+CMD ["node", "scripts/build.js"]
+RUN cd app/server
+RUN npm install
+CMD ["node", "env-cmd -f ./dev.env nodemon src/index.js"]
 # USER jenkins
