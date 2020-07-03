@@ -14,4 +14,6 @@ RUN apt-get update
 RUN apt-get -y install curl
 RUN curl -sL https://deb.nodesource.com/setup_6.x | bash -
 COPY . .
+RUN cd app/client
+RUN node scripts/build.js
 # USER jenkins
