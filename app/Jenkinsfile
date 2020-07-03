@@ -37,9 +37,9 @@ pipeline {
         }
         stage('Deploy') {
             steps {
-
-                sh 'docker build . -t todoapp '
-
+                sh 'docker container stop todo'
+                sh 'docker container rm todo'
+                sh 'docker build . -t todoapp'
                 sh 'docker run -d -t --name todo -p 3000:3000 todoapp'
                 sh 'docker ps'
                 echo 'Deploying....'
