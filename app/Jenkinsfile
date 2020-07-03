@@ -6,6 +6,7 @@ pipeline {
             steps {
                 dir("app/client") {
                     sh "pwd"
+                    sh 'whoami'
                     sh "npm install"
                 }
             }
