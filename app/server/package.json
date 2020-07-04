@@ -12,7 +12,8 @@
     "@shelf/jest-mongodb": "^1.1.5",
     "env-cmd": "^10.1.0",
     "jest": "^25.1.0",
-    "nodemon": "^2.0.2"
+    "nodemon": "^2.0.2",
+    "dotenv": "8.2.0"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

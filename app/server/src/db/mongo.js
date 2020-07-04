@@ -1,14 +1,14 @@
 const mongoose = require('mongoose');
-var path = require('path');
-require('dotenv').config();
-require('dotenv').config({ path: path.join(process.env.WORKSPACE, "app", "server", "dev.env" ) });
+//var path = require('path');
+// require('dotenv').config();
+// require('dotenv').config({ path: path.join(process.env.WORKSPACE, "app", "server", "dev.env" ) });
 //console.log(process.env);
-const ip = process.env.JENKINS_URL.replace("http://","").split(":")[0]
-console.log("MongoDB Url ", process.env.DEV_MONGODB_URL.replace("#ip", ip),);
+//const ip = process.env.JENKINS_URL.replace("http://","").split(":")[0]
+//console.log("MongoDB Url ", process.env.MONGODB_URL.replace("#ip", ip),);
 
 
 const mongooseInstance_ = mongoose.connect(
-    process.env.DEV_MONGODB_URL.replace("#ip", ip),
+    process.env.MONGODB_URL,
     {
         useNewUrlParser: true,
         useCreateIndex: true,
