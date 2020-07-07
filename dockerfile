@@ -4,6 +4,7 @@ COPY . .
 WORKDIR /devops/app/client
 RUN npm install
 RUN npm run build
+RUN mv build /lecture-devops-app/app/server/src/public
 WORKDIR /devops/app/server
 RUN npm install
 EXPOSE 3000
