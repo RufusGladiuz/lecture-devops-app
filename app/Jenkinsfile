@@ -11,6 +11,12 @@ pipeline {
                 }
             }
         }
+                stage('Sanity check') {
+                    steps {
+                        input "Does the staging environment look ok?"
+                    }
+                }
+
         stage('Build-Server') {
             steps {
 
@@ -35,11 +41,6 @@ pipeline {
                 }
             }
         }
-        stage('Sanity check') {
-                    steps {
-                        input "Does the staging environment look ok?"
-                    }
-                }
 
         stage('Deploy') {
             steps {
