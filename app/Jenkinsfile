@@ -11,11 +11,6 @@ pipeline {
                 }
             }
         }
-                stage('Sanity check') {
-                    steps {
-                        input "Does the staging environment look ok?"
-                    }
-                }
 
         stage('Build-Server') {
             steps {
@@ -39,6 +34,12 @@ pipeline {
                     
                     sh 'npm run test'
                 }
+            }
+        }
+        stage('Deploy Confirmation') {
+            steps 
+            {
+                input "Do you want to deploy the Application?"
             }
         }
 
