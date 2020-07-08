@@ -4,10 +4,12 @@ pipeline {
     stages {
         stage("Pre-Build"){
             steps {
+                //PROBLEM: wir müssen checken ob ein container mit dem name existiert ansontent wirft docker einen fehler wenn man container stop aufruft, 
+                //wenn der container nicht existiert
                 // sh "docker ps -q --filter name=mongotest | grep -q . && docker container stop mongotest && docker container rm mongotest"
                 // //sh 'docker container stop mongotest || true && docker container rm mongotest || true'
                 // // sh 'docker container rm mongotest'
-                sh 'docker run -d -t --name mongotest -p 5000:27017 mongo'
+                //sh 'docker run -d -t --name mongotest -p 5000:27017 mongo'
             }
         }
         stage('Build-Client') {
