@@ -4,9 +4,9 @@ pipeline {
     stages {
         stage("Pre-Build"){
             steps {
-                sh "docker ps -q --filter name=mongotest | grep -q . && docker container stop mongotest && docker container rm mongotest"
-                //sh 'docker container stop mongotest || true && docker container rm mongotest || true'
-                // sh 'docker container rm mongotest'
+                // sh "docker ps -q --filter name=mongotest | grep -q . && docker container stop mongotest && docker container rm mongotest"
+                // //sh 'docker container stop mongotest || true && docker container rm mongotest || true'
+                // // sh 'docker container rm mongotest'
                 sh 'docker run -d -t --name mongotest -p 5000:27017 mongo'
             }
         }
@@ -62,6 +62,7 @@ pipeline {
                 sh "docker container stop mongotest"
                 sh "docker container rm mongotest"
                 sh 'docker build . -t todo'
+                //https://stackoverflow.com/questions/45142528/what-is-a-dangling-image-and-what-is-an-unused-image#:~:text=Docker%20images%20consist%20of%20multiple,purpose%20and%20consume%20disk%20space.
                 sh "docker image prune"
                 sh "docker-compose down"
                 sh "docker-compose up -d"
