@@ -4,8 +4,9 @@ pipeline {
     stages {
         stage("Pre-Build"){
             steps {
-                sh 'docker container stop mongotest'
-                sh 'docker container rm mongotest'
+                sh "docker ps -q --filter name=mongotest | grep -q . && docker stop mongotest && docker rm -fv mongotest"
+                //sh 'docker container stop mongotest || true && docker container rm mongotest || true'
+                // sh 'docker container rm mongotest'
                 sh 'docker run -d -t --name mongotest -p 5000:27017 mongo'
             }
         }
