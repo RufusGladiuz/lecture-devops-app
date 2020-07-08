@@ -50,6 +50,13 @@ pipeline {
                 }
             }
         }
+        stage('Deploy Confirmation') {
+            steps 
+            {
+                input "Do you want to deploy the Application?"
+            }
+        }
+
         stage('Deploy') {
             steps {
                 sh "docker container stop mongo"
