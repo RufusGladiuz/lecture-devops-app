@@ -6,7 +6,6 @@ const mongoose = require('mongoose');
 //const ip = process.env.JENKINS_URL.replace("http://","").split(":")[0]
 console.log("MongoDB Url ", process.env.MONGODB_URL);
 
-
 const mongooseInstance_ = mongoose.connect(
     process.env.MONGODB_URL,
     {
