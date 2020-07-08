@@ -4,8 +4,9 @@ pipeline {
     stages {
         stage("Pre-Build"){
             steps {
-                sh "docker-compose down"
-                sh 'docker run -d -t --name mongotest -p 27017:27017 mongo'
+                sh 'docker container stop mongotest'
+                sh 'docker container rm mongotest'
+                sh 'docker run -d -t --name mongotest -p 5000:27017 mongo'
             }
         }
         stage('Build-Client') {
@@ -60,6 +61,8 @@ pipeline {
                 sh "docker container stop mongotest"
                 sh "docker container rm mongotest"
                 sh 'docker build . -t todo'
+                sh "docker image prune"
+                sh "docker-compose down"
                 sh "docker-compose up -d"
             }
         }
