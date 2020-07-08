@@ -3,7 +3,6 @@ version: '3.1'
 services:
   mongo:
     image: mongo
-    hostname: mongo
     restart: always
     ports:
      - "27017:27017"
@@ -11,7 +10,6 @@ services:
     #  - devops_default
   todo:
     image: todo
-    hostname: todo
     ports:
      - "3000:3000"
     environment: 
