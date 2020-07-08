@@ -2,6 +2,13 @@ pipeline {
     agent any
 
     stages {
+        stage("Pre-Build"){
+            steps {
+                sh "docker container stop mongo"
+                sh "docker container rm mongo"
+                sh 'docker run -d -t --name mongo -p 27017:27017 mongo'
+            }
+        }
         stage('Build-Client') {
             steps {
                 dir("app/client") {
@@ -11,9 +18,17 @@ pipeline {
                 }
             }
         }
+        stage('Test-Client') {
+            steps {
+                echo '--------------------------> Starting Client Tests'
+                dir("app/client") {
+                    
+                    sh 'npm run test'
+                }
+            }
+        }
         stage('Build-Server') {
             steps {
-
                 dir("app/server") {
                     sh "pwd"
                     sh "npm install"
@@ -26,9 +41,9 @@ pipeline {
                 //}
             }
         }
-        stage('Test') {
+        stage('Test-Server') {
             steps {
-                echo '--------------------------> Starting Jest Tests'
+                echo '--------------------------> Starting Jest Server Tests'
                 dir("app/server") {
                     
                     sh 'npm run test'
@@ -37,10 +52,13 @@ pipeline {
         }
         stage('Deploy') {
             steps {
+                sh "docker container stop mongo"
+                sh "docker container rm mongo"
+                sh 'docker run -d -t --name mongo -p 27017:27017 mongo'
                 sh 'docker container stop todo'
                 sh 'docker container rm todo'
-                sh 'docker build . -t todoapp'
-                sh 'docker run -d -t --name todo -p 3000:3000 todoapp'
+                sh 'docker build . -t todo'
+                sh 'docker run -d -t --name todo -p 3000:3000 todo'
                 sh 'docker ps'
                 echo 'Deploying....'
             }
