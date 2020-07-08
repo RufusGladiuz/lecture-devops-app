@@ -9,9 +9,11 @@ services:
     # networks:
     #  - devops_default
   todo:
-    image: todoapp
+    image: todo
     ports:
      - "3000:3000"
+    environment: 
+     - MONGODB_URL="mongodb://mongo:27017/todo-app"
 #     networks:
 #      - devops_default
 # networks:

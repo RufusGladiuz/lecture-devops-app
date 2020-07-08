@@ -2,74 +2,78 @@ pipeline {
     agent any
 
     stages {
-        stage("Pre-Build"){
-            steps {
-                sh "docker container stop mongo"
-                sh "docker container rm mongo"
-                sh 'docker run -d -t --name mongo -p 27017:27017 mongo'
-            }
+        stage("Build") {
+            sh 'docker build . -t todo'
+            sh "docker-compose up"
         }
-        stage('Build-Client') {
-            steps {
-                dir("app/client") {
-                    sh "pwd"
-                    sh 'whoami'
-                    sh "npm install"
-                }
-            }
-        }
-        stage('Test-Client') {
-            steps {
-                echo '--------------------------> Starting Client Tests'
-                dir("app/client") {
+        // stage("Pre-Build"){
+        //     steps {
+        //         sh "docker container stop mongo"
+        //         sh "docker container rm mongo"
+        //         sh 'docker run -d -t --name mongo -p 27017:27017 mongo'
+        //     }
+        // }
+        // stage('Build-Client') {
+        //     steps {
+        //         dir("app/client") {
+        //             sh "pwd"
+        //             sh 'whoami'
+        //             sh "npm install"
+        //         }
+        //     }
+        // }
+        // stage('Test-Client') {
+        //     steps {
+        //         echo '--------------------------> Starting Client Tests'
+        //         dir("app/client") {
                     
-                    sh 'npm run test'
-                }
-            }
-        }
-        stage('Build-Server') {
-            steps {
-                dir("app/server") {
-                    sh "pwd"
-                    sh "npm install"
-                    sh "npm install dotenv"
-                    //sh 'npm audit fix'
-                }
-                //dir("app/server/python"){
-                //    sh 'python -m pip install -r requirments.txt'
-                //    sh 'python mongo.py'
-                //}
-            }
-        }
-        stage('Test-Server') {
-            steps {
-                echo '--------------------------> Starting Jest Server Tests'
-                dir("app/server") {
+        //             sh 'npm run test'
+        //         }
+        //     }
+        // }
+        // stage('Build-Server') {
+        //     steps {
+        //         dir("app/server") {
+        //             sh "pwd"
+        //             sh "npm install"
+        //             //sh "npm install dotenv"
+        //             //sh 'npm audit fix'
+        //         }
+        //         //dir("app/server/python"){
+        //         //    sh 'python -m pip install -r requirments.txt'
+        //         //    sh 'python mongo.py'
+        //         //}
+        //     }
+        // }
+        // stage('Test-Server') {
+        //     steps {
+        //         echo '--------------------------> Starting Jest Server Tests'
+        //         dir("app/server") {
                     
-                    sh 'npm run test'
-                }
-            }
-        }
-        stage('Deploy Confirmation') {
-            steps 
-            {
-                input "Do you want to deploy the Application?"
-            }
-        }
+        //             sh 'npm run test'
+        //         }
+        //     }
+        // }
+        // stage('Deploy Confirmation') {
+        //     steps 
+        //     {
+        //         input "Do you want to deploy the Application?"
+        //     }
+        // }
 
-        stage('Deploy') {
-            steps {
-                sh "docker container stop mongo"
-                sh "docker container rm mongo"
-                sh 'docker run -d -t --name mongo -p 27017:27017 mongo'
-                sh 'docker container stop todo'
-                sh 'docker container rm todo'
-                sh 'docker build . -t todo'
-                sh 'docker run -d -t --name todo -p 3000:3000 todo'
-                sh 'docker ps'
-                echo 'Deploying....'
-            }
-        }
+        // stage('Deploy') {
+        //     steps {
+        //         sh "docker container stop mongo"
+        //         sh "docker container rm mongo"
+        //         sh 'docker run -d -t --name mongo -p 27017:27017 mongo'
+        //         sh 'docker container stop todo'
+        //         sh 'docker container rm todo'
+        //         sh 'docker build . -t todo'
+        //         sh 'docker run -d -t --name todo -p 3000:3000 todo'
+        //         sh 'docker ps'
+        //         echo 'Deploying....'
+        //     }
+        // }
     }
     post {  
          always {  
