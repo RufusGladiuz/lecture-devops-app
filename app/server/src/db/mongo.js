@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 // var path = require('path');
-// require('dotenv').config();
+require('dotenv').config();
 // require('dotenv').config({ path: path.join(process.env.WORKSPACE, "app", "server", "dev.env" ) });
 //console.log(process.env);
 //const ip = process.env.JENKINS_URL.replace("http://","").split(":")[0]
