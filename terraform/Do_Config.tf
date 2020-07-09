@@ -13,16 +13,20 @@ resource "digitalocean_droplet" "web1" {
     type = "ssh"
     private_key = file(var.pvt_key)
     timeout = "2m"
+    agent = true
   }
 
 provisioner "remote-exec" {
     inline =[
         "sudo apt-get update",
-        "sudo apt install npm",
+        "sudo apt install npm -y",
+
         "sudo apt-get update",
-        "sudo apt install nodejs",
+        "sudo apt install nodejs -y",
+
         "sudo apt-get update",
-        "sudo apt install git",
+        "sudo apt install git -y",
+
 
     ]
 }
