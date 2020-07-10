@@ -40,6 +40,11 @@ provisioner "remote-exec" {
         "sudo apt install jenkins -y",
         "sudo systemctl start jenkins",
 
+        //Setup jenkins pipeline
+        "ip route get 1.2.3.4 | awk '{print $7}'"
+        "sudo wget http://$(!!):8080/jnlpJars/jenkins-cli.jar"
+
+
         //TODO: ADD Docker
         //TODO: ADD Docker Compose
         //TODO: Impliment monitor software of choice
