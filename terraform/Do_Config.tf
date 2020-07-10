@@ -3,7 +3,7 @@ resource "digitalocean_droplet" "web1" {
   name = "DevOpsSoSe2012"
   region = "FRA1"
   size = "2GB"
-  private_networking = true
+  private_networking = false
   ssh_keys = [
     var.ssh_fingerprint
   ]
@@ -41,13 +41,24 @@ provisioner "remote-exec" {
         "sudo systemctl start jenkins",
 
         //Setup jenkins pipeline
-        "ip route get 1.2.3.4 | awk '{print $7}'"
-        "sudo wget http://$(!!):8080/jnlpJars/jenkins-cli.jar"
+        "ip route get 1.2.3.4 | awk '{print $7}'",
+        "sudo wget http://$(!!):8080/jnlpJars/jenkins-cli.jar",
 
+        //Set up python and relevant packages
+        "sudo apt update",
+        "sudo apt install python3.8 -y",
+        "sudo apt update",
+        "apt install python3-pip -y",
+        "python3 -m pip install jenkinsapi",
 
         //TODO: ADD Docker
         //TODO: ADD Docker Compose
         //TODO: Impliment monitor software of choice
+
+
+
+
+
     ]
 }
 
