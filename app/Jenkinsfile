@@ -2,70 +2,101 @@ pipeline {
     agent any
 
     stages {
-        // stage("Pre-Build"){
+        // stage("Pre-Build") {
+        //    steps {
+        //        sh "docker run -d -t --name mongotest -p 27017:27017 mongo"
+        //    }
+        // }
+        // stage('Build-Client') {
         //     steps {
-        //         //PROBLEM: wir müssen checken ob ein container mit dem name existiert ansontent wirft docker einen fehler wenn man container stop aufruft, 
-        //         //wenn der container nicht existiert
-        //         // sh "docker ps -q --filter name=mongotest | grep -q . && docker container stop mongotest && docker container rm mongotest"
-        //         // //sh 'docker container stop mongotest || true && docker container rm mongotest || true'
-        //         // // sh 'docker container rm mongotest'
-        //         //sh 'docker run -d -t --name mongotest -p 5000:27017 mongo'
+        //         dir("app/client") {
+        //             sh "pwd"
+        //             sh 'whoami'
+        //             sh "npm install"
+        //         }
         //     }
         // }
-        stage('Build-Client') {
-            steps {
-                dir("app/client") {
-                    sh "pwd"
-                    sh 'whoami'
-                    sh "npm install"
-                }
-            }
-        }
-        stage('Test-Client') {
-            steps {
-                echo '--------------------------> Starting Client Tests'
-                dir("app/client") {
+        // stage('Test-Client') {
+        //     steps {
+        //         echo '--------------------------> Starting Client Tests'
+        //         dir("app/client") {
                     
-                    sh 'npm run test'
-                }
-            }
-        }
-        stage('Build-Server') {
-            steps {
-                dir("app/server") {
-                    sh "pwd"
-                    sh "npm install"
-                    sh "npm install dotenv"
-                    //sh 'npm audit fix'
-                }
-                //dir("app/server/python"){
-                //    sh 'python -m pip install -r requirments.txt'
-                //    sh 'python mongo.py'
-                //}
-            }
-        }
-        stage('Test-Server') {
-            steps {
-                echo '--------------------------> Starting Jest Server Tests'
-                dir("app/server") {
+        //             sh 'npm run test'
+        //         }
+        //     }
+        // }
+        // stage('Build-Server') {
+        //     steps {
+        //         dir("app/server") {
+        //             sh "pwd"
+        //             sh "npm install"
+        //             sh "npm install dotenv"
+        //             //sh 'npm audit fix'
+        //         }
+        //         //dir("app/server/python"){
+        //         //    sh 'python -m pip install -r requirments.txt'
+        //         //    sh 'python mongo.py'
+        //         //}
+        //     }
+        // }
+        // stage('Test-Server') {
+        //     steps {
+        //         echo '--------------------------> Starting Jest Server Tests'
+        //         dir("app/server") {
                     
-                    sh 'npm run test'
-                }
+        //             sh 'npm run test'
+        //         }
+        //     }
+        // }
+        // stage('Deploy Confirmation') {
+        //     steps 
+        //     {
+        //         input "Do you want to deploy the Application?"
+        //     }
+        // }
+        // stage("Deploy") {
+        //     steps {
+        //         sh "docker container stop mongotest"
+        //         sh "docker container rm mongotest"
+        //         sh 'docker build . -t todo'
+        //         //https://stackoverflow.com/questions/45142528/what-is-a-dangling-image-and-what-is-an-unused-image#:~:text=Docker%20images%20consist%20of%20multiple,purpose%20and%20consume%20disk%20space.
+        //         sh "docker image prune"
+        //         sh "docker-compose down"
+        //         sh "docker-compose up -d"
+        //     }
+        // }
+        stage("Pre-Build") {
+            steps {
+                sh "docker-compose build"
+                sh "docker-compose up -d"
             }
         }
+        stage('Client-Test') {
+            steps {
+               sh "docker-compose exec -T todo bash"
+               sh "cd app/client"
+               sh "npm run test"
+               sh "exit"
+            }
+        }
+        stage('Server-Test') {
+            steps {
+               sh "docker-compose exec -T todo bash"
+               sh "cd app/server"
+               sh "npm run test"
+               sh "exit"
+            }
+        } 
         stage('Deploy Confirmation') {
             steps 
             {
                 input "Do you want to deploy the Application?"
             }
         }
-        stage("Deploy") {
-            steps {
-                sh "docker container stop mongotest"
-                sh "docker container rm mongotest"
-                sh 'docker build . -t todo'
-                //https://stackoverflow.com/questions/45142528/what-is-a-dangling-image-and-what-is-an-unused-image#:~:text=Docker%20images%20consist%20of%20multiple,purpose%20and%20consume%20disk%20space.
-                sh "docker image prune"
+        stage('Deploy') {
+            steps 
+            {
+                sh "docker-compose stop"
                 sh "docker-compose down"
                 sh "docker-compose up -d"
             }
@@ -73,20 +104,61 @@ pipeline {
     }
     post {  
          always {  
-             echo 'This will always run'  
+            echo 'This will always run'  
          }  
          success {  
-             echo 'This will run only if successful. GEIL'  
+            echo 'This will run only if successful. GEIL'  
          }  
          failure {  
-              echo 'FAIL' //mail bcc: '', body: "<b>Example</b><br>Project: ${env.JOB_NAME} <br>Build Number: ${env.BUILD_NUMBER} <br> URL de build: ${env.BUILD_URL}", cc: '', charset: 'UTF-8', from: 'jenkinsbot@web.de', mimeType: 'text/html', replyTo: '', subject: "ERROR CI: Project name -> ${env.JOB_NAME}", to: "jenkinsbot@web.de";  
+            sh "docker-compose stop"
+            sh "docker-compose down"
+            echo 'FAIL' //mail bcc: '', body: "<b>Example</b><br>Project: ${env.JOB_NAME} <br>Build Number: ${env.BUILD_NUMBER} <br> URL de build: ${env.BUILD_URL}", cc: '', charset: 'UTF-8', from: 'jenkinsbot@web.de', mimeType: 'text/html', replyTo: '', subject: "ERROR CI: Project name -> ${env.JOB_NAME}", to: "jenkinsbot@web.de";  
          }  
          unstable {  
-             echo 'This will run only if the run was marked as unstable'  
+            echo 'This will run only if the run was marked as unstable'  
          }  
          changed {  
-             echo 'This will run only if the state of the Pipeline has changed'  
-             echo 'For example, if the Pipeline was previously failing but is now successful'  
+            echo 'This will run only if the state of the Pipeline has changed'  
+            echo 'For example, if the Pipeline was previously failing but is now successful'  
          }  
      }  
 }
+
+// stage("Pre-Build") {
+//             steps {
+//                 sh "docker-compose stop"
+//                 sh "docker-compose down"
+//                 sh "docker-compose build"
+//                 sh "docker-compose up -d"
+//             }
+//         }
+//         stage('Client-Test') {
+//             steps {
+//                sh "docker exec -t todo bash"
+//                sh "cd app/client"
+//                sh "npm run test"
+//                sh "exit"
+//             }
+//         }
+//         stage('Server-Test') {
+//             steps {
+//                sh "docker exec -it todo bash"
+//                sh "cd app/server"
+//                sh "npm run test"
+//                sh "exit"
+//             }
+//         } 
+//         stage('Deploy Confirmation') {
+//             steps 
+//             {
+//                 input "Do you want to deploy the Application?"
+//             }
+//         }
+//         stage('Deploy') {
+//             steps 
+//             {
+//                 sh "docker-compose stop"
+//                 sh "docker-compose down"
+//                 sh "docker-compose up -d"
+//             }
+//         }

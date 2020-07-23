@@ -1,11 +1,13 @@
 version: '3.1'
 services:
   mongo:
+    container_name: mongo
     image: mongo
     restart: always
     ports:
       - 27017:27017
   todo:
+    container_name: todo
     image: todo
     ports:
       - 3000:3000
