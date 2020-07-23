@@ -73,7 +73,7 @@ pipeline {
         }
         stage('Client-Test') {
             steps {
-               sh "docker exec -i todo bash"
+               sh "docker exec -T todo bash"
                sh "cd app/client"
                sh "npm run test"
                sh "exit"
@@ -81,7 +81,7 @@ pipeline {
         }
         stage('Server-Test') {
             steps {
-               sh "docker exec -i todo bash"
+               sh "docker exec -T todo bash"
                sh "cd app/server"
                sh "npm run test"
                sh "exit"
