@@ -4,6 +4,8 @@ pipeline {
     stages {
         stage("Pre-Build") {
             steps {
+                sh "docker-compose stop"
+                sh "docker-compose down"
                 sh "docker-compose build"
                 sh "docker-compose up -d"
             }
@@ -33,7 +35,7 @@ pipeline {
             {
                 sh "docker-compose stop"
                 sh "docker-compose down"
-                sh "docker-compose up"
+                sh "docker-compose up -d"
             }
         }
         // docker-compose down
