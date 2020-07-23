@@ -12,16 +12,18 @@ pipeline {
         }
         stage('Client-Test') {
             steps {
-               sh "docker exec --tty todo bash"
+               sh "docker exec -t todo bash"
                sh "cd app/client"
                sh "npm run test"
+               sh "exit"
             }
         }
         stage('Server-Test') {
             steps {
-               sh "docker exec --tty todo bash"
+               sh "docker exec -t todo bash"
                sh "cd app/server"
                sh "npm run test"
+               sh "exit"
             }
         } 
         stage('Deploy Confirmation') {
@@ -39,65 +41,73 @@ pipeline {
             }
         }
         // docker-compose down
-        // stage('Build-Client') {
-        //     steps {
-        //         dir("app/client") {
-        //             sh "pwd"
-        //             sh 'whoami'
-        //             sh "npm install"
-        //         }
-        //     }
-        // }
-        // stage('Test-Client') {
-        //     steps {
-        //         echo '--------------------------> Starting Client Tests'
-        //         dir("app/client") {
+    //     stage("Pre-Build") {
+    //        steps {
+    //            sh "docker-compose stop"
+    //            sh "docker-compose down"
+    //            sh "docker-compose build"
+    //            sh "docker-compose up -d"
+    //        }
+    //     }
+    //     stage('Build-Client') {
+    //         steps {
+    //             dir("app/client") {
+    //                 sh "pwd"
+    //                 sh 'whoami'
+    //                 sh "npm install"
+    //             }
+    //         }
+    //     }
+    //     stage('Test-Client') {
+    //         steps {
+    //             echo '--------------------------> Starting Client Tests'
+    //             dir("app/client") {
                     
-        //             sh 'npm run test'
-        //         }
-        //     }
-        // }
-        // stage('Build-Server') {
-        //     steps {
-        //         dir("app/server") {
-        //             sh "pwd"
-        //             sh "npm install"
-        //             sh "npm install dotenv"
-        //             //sh 'npm audit fix'
-        //         }
-        //         //dir("app/server/python"){
-        //         //    sh 'python -m pip install -r requirments.txt'
-        //         //    sh 'python mongo.py'
-        //         //}
-        //     }
-        // }
-        // stage('Test-Server') {
-        //     steps {
-        //         echo '--------------------------> Starting Jest Server Tests'
-        //         dir("app/server") {
+    //                 sh 'npm run test'
+    //             }
+    //         }
+    //     }
+    //     stage('Build-Server') {
+    //         steps {
+    //             dir("app/server") {
+    //                 sh "pwd"
+    //                 sh "npm install"
+    //                 sh "npm install dotenv"
+    //                 //sh 'npm audit fix'
+    //             }
+    //             //dir("app/server/python"){
+    //             //    sh 'python -m pip install -r requirments.txt'
+    //             //    sh 'python mongo.py'
+    //             //}
+    //         }
+    //     }
+    //     stage('Test-Server') {
+    //         steps {
+    //             echo '--------------------------> Starting Jest Server Tests'
+    //             dir("app/server") {
                     
-        //             sh 'npm run test'
-        //         }
-        //     }
-        // }
-        // stage('Deploy Confirmation') {
-        //     steps 
-        //     {
-        //         input "Do you want to deploy the Application?"
-        //     }
-        // }
-        // stage("Deploy") {
-        //     steps {
-        //         sh "docker container stop mongotest"
-        //         sh "docker container rm mongotest"
-        //         sh 'docker build . -t todo'
-        //         //https://stackoverflow.com/questions/45142528/what-is-a-dangling-image-and-what-is-an-unused-image#:~:text=Docker%20images%20consist%20of%20multiple,purpose%20and%20consume%20disk%20space.
-        //         sh "docker image prune"
-        //         sh "docker-compose down"
-        //         sh "docker-compose up -d"
-        //     }
-        // }
-    }
+    //                 sh 'npm run test'
+    //             }
+    //         }
+    //     }
+    //     stage('Deploy Confirmation') {
+    //         steps 
+    //         {
+    //             input "Do you want to deploy the Application?"
+    //         }
+    //     }
+    //     stage("Deploy") {
+    //         steps {
+    //             sh "docker container stop mongotest"
+    //             sh "docker container rm mongotest"
+    //             sh 'docker build . -t todo'
+    //             //https://stackoverflow.com/questions/45142528/what-is-a-dangling-image-and-what-is-an-unused-image#:~:text=Docker%20images%20consist%20of%20multiple,purpose%20and%20consume%20disk%20space.
+    //             sh "docker image prune"
+    //             sh "docker-compose down"
+    //             sh "docker-compose up -d"
+    //         }
+    //     }
+    // }
     post {  
          always {  
              echo 'This will always run'  
