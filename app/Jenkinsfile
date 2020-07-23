@@ -12,14 +12,14 @@ pipeline {
         }
         stage('Client-Test') {
             steps {
-               sh "docker exec -it todo bash"
+               sh "docker exec --tty todo bash"
                sh "cd app/client"
                sh "npm run test"
             }
         }
         stage('Server-Test') {
             steps {
-               sh "docker exec -it todo bash"
+               sh "docker exec --tty todo bash"
                sh "cd app/server"
                sh "npm run test"
             }
