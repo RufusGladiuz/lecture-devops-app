@@ -13,7 +13,7 @@ resource "digitalocean_droplet" "web1" {
     type = "ssh"
     private_key = file(var.pvt_key)
     timeout = "2m"
-    agent = true
+    agent = false
   }
 
 provisioner "remote-exec" {
@@ -44,11 +44,10 @@ provisioner "remote-exec" {
         "sudo systemctl start jenkins",
 
         //Setup jenkins pipeline
-        //"ip route get 1.2.3.4 | awk '{print $7}'",
         "sudo sleep 30",
         "sudo wget http://`ip route get 1.2.3.4 | awk '{print $7}'`:8080/jnlpJars/jenkins-cli.jar",
-        "sudo echo 'jenkins.model.Jenkins.instance.securityRealm.createAccount(\"devops\", \"admin123\")' | java -jar jenkins-cli.jar -auth admin:`cat /var/lib/jenkins/secrets/initialAdminPassword` -s http://localhost:8080/ groovy ="
-
+        "sudo echo 'jenkins.model.Jenkins.instance.securityRealm.createAccount(\"devops\", \"admin123\")' | java -jar jenkins-cli.jar -auth admin:`cat /var/lib/jenkins/secrets/initialAdminPassword` -s http://localhost:8080/ groovy =",
+        "sudo java -jar jenkins-cli.jar -auth devops:admin123 -s http://localhost:8080/ install-plugin configuration-as-code"
         //"curl -L https://github.com/jenkins-zh/jenkins-cli/releases/latest/download/jcli-linux-amd64.tar.gz|tar xzv",
         //"sudo mv jcli /usr/local/bin/",
         
