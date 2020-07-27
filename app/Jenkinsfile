@@ -94,7 +94,7 @@ pipeline {
             {
                 sh "docker-compose stop"
                 sh "docker-compose down"
-                sh "mkdir public-devops"
+                //sh "mkdir public-devops"
                 sh "cp -r . /public-devops"
                 dir("public-devops") {
                     sh "docker-compose up -d"
