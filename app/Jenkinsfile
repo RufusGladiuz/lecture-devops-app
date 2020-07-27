@@ -73,7 +73,7 @@ pipeline {
         }
         stage('Client-Test') {
             steps {
-               sh "docker exec -w /app/client todo npm run test"
+               sh "docker exec -w /devops/app/client todo npm run test"
             //    sh "cd app/client"
             //    sh "npm run test"
             //    sh "exit"
@@ -82,7 +82,7 @@ pipeline {
         stage('Server-Test') {
             steps {
                sh "docker exec -t todo bash"
-               sh "cd app/server"
+               sh "cd /devops/app/server"
                sh "npm run test"
                sh "exit"
             }
@@ -110,8 +110,8 @@ pipeline {
             echo 'This will run only if successful. GEIL'  
          }  
          failure {  
-            sh "docker-compose stop"
-            sh "docker-compose down"
+            // sh "docker-compose stop"
+            // sh "docker-compose down"
             echo 'FAIL' //mail bcc: '', body: "<b>Example</b><br>Project: ${env.JOB_NAME} <br>Build Number: ${env.BUILD_NUMBER} <br> URL de build: ${env.BUILD_URL}", cc: '', charset: 'UTF-8', from: 'jenkinsbot@web.de', mimeType: 'text/html', replyTo: '', subject: "ERROR CI: Project name -> ${env.JOB_NAME}", to: "jenkinsbot@web.de";  
          }  
          unstable {  
