@@ -92,8 +92,8 @@ pipeline {
         stage('Deploy') {
             steps 
             {
-                sh "docker-compose stop"
-                sh "docker-compose down"
+                // sh "docker-compose stop"
+                // sh "docker-compose down"
                 sh "mkdir public-devops"
                 sh "cp -r /devops /public-devops"
                 dir("public-devops") {
