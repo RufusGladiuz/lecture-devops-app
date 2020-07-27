@@ -73,7 +73,7 @@ pipeline {
         }
         stage('Client-Test') {
             steps {
-               sh "docker exec -w app/client todo npm run test"
+               sh "docker exec -w ./app/client todo npm run test"
             //    sh "cd app/client"
             //    sh "npm run test"
             //    sh "exit"
