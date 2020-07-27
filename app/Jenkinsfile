@@ -76,17 +76,11 @@ pipeline {
         stage('Client-Test') {
             steps {
                sh "docker exec -w /devops/app/client todo npm run test"
-            //    sh "cd app/client"
-            //    sh "npm run test"
-            //    sh "exit"
             }
         }
         stage('Server-Test') {
             steps {
                sh "docker exec -w /devops/app/server todo npm run test"
-            //    sh "cd /devops/app/server"
-            //    sh "npm run test"
-            //    sh "exit"
             }
         } 
         stage('Deploy Confirmation') {
@@ -100,7 +94,11 @@ pipeline {
             {
                 sh "docker-compose stop"
                 sh "docker-compose down"
-                sh "docker-compose up -d"
+                sh "mkdir public-devops"
+                sh "cp -r /devops /public-devops"
+                dir("public-devops") {
+                    sh "docker-compose up -d"
+                }
             }
         }
     }
