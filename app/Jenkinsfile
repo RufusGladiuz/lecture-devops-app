@@ -81,10 +81,10 @@ pipeline {
         }
         stage('Server-Test') {
             steps {
-               sh "docker exec -t todo bash"
-               sh "cd /devops/app/server"
-               sh "npm run test"
-               sh "exit"
+               sh "docker exec -w /devops/app/server todo npm run test"
+            //    sh "cd /devops/app/server"
+            //    sh "npm run test"
+            //    sh "exit"
             }
         } 
         stage('Deploy Confirmation') {
