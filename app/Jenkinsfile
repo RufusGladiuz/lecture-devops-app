@@ -67,7 +67,7 @@ pipeline {
         // }
         stage("Pre-Build") {
             steps {
-                sg "docker build -t todo"
+                sh "docker build -t todo"
                 sh "docker image prune"
                 sh "docker-compose build"
                 sh "docker-compose up -d"
