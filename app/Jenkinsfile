@@ -67,6 +67,7 @@ pipeline {
         // }
         stage("Pre-Build") {
             steps {
+                sh "docker image prune"
                 sh "docker-compose build"
                 sh "docker-compose up -d"
             }
