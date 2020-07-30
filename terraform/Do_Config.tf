@@ -37,22 +37,76 @@ provisioner "remote-exec" {
         "sudo apt install openjdk-8-jdk -y",
 
         //Install Jenkins
-        "wget -q -O - http://pkg.jenkins-ci.org/debian/jenkins-ci.org.key | sudo apt-key add -",
+        "wget -q -O - https://pkg.jenkins.io/debian-stable/jenkins.io.key | sudo apt-key add -",
         "sudo sh -c 'echo deb http://pkg.jenkins-ci.org/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'",
         "sudo apt update",
         "sudo apt install jenkins -y",
         "sudo systemctl start jenkins",
 
-        //Setup jenkins pipeline
+        //Wait for jenkins to initilise
         "sudo sleep 30",
+
+        //Get Jenkis JDK
         "sudo wget http://`ip route get 1.2.3.4 | awk '{print $7}'`:8080/jnlpJars/jenkins-cli.jar",
+
+        //Create jenkins user
         "sudo echo 'jenkins.model.Jenkins.instance.securityRealm.createAccount(\"devops\", \"admin123\")' | java -jar jenkins-cli.jar -auth admin:`cat /var/lib/jenkins/secrets/initialAdminPassword` -s http://localhost:8080/ groovy =",
-        "sudo java -jar jenkins-cli.jar -auth devops:admin123 -s http://localhost:8080/ install-plugin configuration-as-code"
-        //"curl -L https://github.com/jenkins-zh/jenkins-cli/releases/latest/download/jcli-linux-amd64.tar.gz|tar xzv",
-        //"sudo mv jcli /usr/local/bin/",
+
+        // Installing jenkins basic plugins
+        "sudo java -jar jenkins-cli.jar -auth devops:admin123 -s http://localhost:8080/ install-plugin cloudbees-folder",
+        "sudo java -jar jenkins-cli.jar -auth devops:admin123 -s http://localhost:8080/ install-plugin timestamper",
+        "sudo java -jar jenkins-cli.jar -auth devops:admin123 -s http://localhost:8080/ install-plugin workflow-aggregator",
+        "sudo java -jar jenkins-cli.jar -auth devops:admin123 -s http://localhost:8080/ install-plugin antisamy-markup-formatter",
+        "sudo java -jar jenkins-cli.jar -auth devops:admin123 -s http://localhost:8080/ install-plugin build-timeout",
+        "sudo java -jar jenkins-cli.jar -auth devops:admin123 -s http://localhost:8080/ install-plugin credentials-binding",
+        "sudo java -jar jenkins-cli.jar -auth devops:admin123 -s http://localhost:8080/ install-plugin ws-cleanup",
+        "sudo java -jar jenkins-cli.jar -auth devops:admin123 -s http://localhost:8080/ install-plugin ant",
+        "sudo java -jar jenkins-cli.jar -auth devops:admin123 -s http://localhost:8080/ install-plugin gradle",      
+        "sudo java -jar jenkins-cli.jar -auth devops:admin123 -s http://localhost:8080/ install-plugin github-branch-source",
+        "sudo java -jar jenkins-cli.jar -auth devops:admin123 -s http://localhost:8080/ install-plugin pipeline-github-lib",
+        "sudo java -jar jenkins-cli.jar -auth devops:admin123 -s http://localhost:8080/ install-plugin pipeline-stage-view",
+        "sudo java -jar jenkins-cli.jar -auth devops:admin123 -s http://localhost:8080/ install-plugin git",
+        "sudo java -jar jenkins-cli.jar -auth devops:admin123 -s http://localhost:8080/ install-plugin subversion",
+        "sudo java -jar jenkins-cli.jar -auth devops:admin123 -s http://localhost:8080/ install-plugin ssh-slaves",
+        "sudo java -jar jenkins-cli.jar -auth devops:admin123 -s http://localhost:8080/ install-plugin matrix-auth",
+        "sudo java -jar jenkins-cli.jar -auth devops:admin123 -s http://localhost:8080/ install-plugin pam-auth",
+        "sudo java -jar jenkins-cli.jar -auth devops:admin123 -s http://localhost:8080/ install-plugin ldap",
+        "sudo java -jar jenkins-cli.jar -auth devops:admin123 -s http://localhost:8080/ install-plugin email-ext",
+        "sudo java -jar jenkins-cli.jar -auth devops:admin123 -s http://localhost:8080/ install-plugin mailer",
+        "sudo java -jar jenkins-cli.jar -auth devops:admin123 -s http://localhost:8080/ install-plugin configuration-as-code",
+
+        // Give jenkis rights to use docker
+        "sudo usermod -aG docker jenkins",
+        "sudo systemctl restart jenkins",
         
-       //"echo 'jenkins.model.Jenkins.instance.securityRealm.createAccount(\"temp\", \"admin123\")' | java -jar ./jenkins-cli.jar -s \"http://localhost:8080\" -auth admin:`/var/lib/jenkins/secrets/initialAdminPassword` -noKeyAuth groovy = –",
-        //Set up python and relevant packages
+
+
+        
+
+        
+
+        
+
+        
+        
+
+            
+
+
+        
+
+
+        
+
+
+        
+
+        
+
+        
+        //"sudo java -jar jenkins-cli.jar -auth devops:admin123 -s http://localhost:8080/ install-plugin configuration-as-code"
+
+       //Set up python and relevant packages
         //"sudo apt update",
         //"sudo apt install python3.8 -y",
         //"sudo apt update",
