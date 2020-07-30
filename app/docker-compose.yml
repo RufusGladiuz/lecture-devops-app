@@ -1,0 +1,21 @@
+version: '3.1'
+services:
+  mongo:
+    container_name: mongo
+    image: mongopublic
+    restart: always
+    ports:
+      - 27017:27017
+  todo:
+    container_name: todo
+    image: todopublic
+    ports:
+      - 3000:3000
+    environment:
+      - MONGODB_URL=mongodb://mongopublic:27017/todo-app
+
+#     networks:
+#      - devops_default
+# networks:
+#   devops_default:
+#     external: true
