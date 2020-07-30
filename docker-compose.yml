@@ -5,14 +5,14 @@ services:
     image: mongo
     restart: always
     ports:
-      - 27017:27017
+      - 8888:27017
   todo:
     container_name: todo
     image: todo
     ports:
-      - 3000:3000
+      - 5000:5000
     environment:
-      - MONGODB_URL=mongodb://mongo:27017/todo-app
+      - MONGODB_URL=mongodb://mongo:8888/todo-app
 
 #     networks:
 #      - devops_default

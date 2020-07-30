@@ -99,6 +99,8 @@ pipeline {
                 //sh "cp -a ./app/. /publicdevops" //No such directory error
                 dir("publicdevops/app") {
                     // sh "git clone https://github.com/Oni22/lecture-devops-app.git"
+                    sh "docker-compose stop"
+                    sh "docker-compose down"
                     sh "docker-compose up -d"
                 }
             }
