@@ -1,14 +1,14 @@
 version: '3.1'
 services:
   mongo:
-    container_name: mongo
-    image: mongopublic
+    container_name: mongopublic
+    image: mongo
     restart: always
     ports:
       - 27017:27017
   todo:
-    container_name: todo
-    image: todopublic
+    container_name: todopublic
+    image: todo
     ports:
       - 3000:3000
     environment:
