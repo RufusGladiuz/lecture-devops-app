@@ -94,9 +94,9 @@ pipeline {
             {
                 sh "docker-compose stop"
                 sh "docker-compose down"
-                sh "mkdir public-devops"
-                sh "cp -r * /public-devops"
-                dir("public-devops") {
+                sh "mkdir publicdevops" 
+                sh "cp -a ./app/. /publicdevops" //No such directory error
+                dir("public-devops/app") {
                     sh "docker-compose up -d"
                 }
             }
