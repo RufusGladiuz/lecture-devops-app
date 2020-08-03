@@ -24,8 +24,13 @@ provisioner "remote-exec" {
         "sudo apt install npm -y",
 
       //TODO: Install nodeJS > 10.0
-        "sudo apt-get update",
+        //"sudo apt-get update",
+        //"sudo apt install nodejs:10 -y",
+
+        "sudo curl -sL https://deb.nodesource.com/setup_10.x -o nodesource_setup.sh",
+        "sudo bash nodesource_setup.sh",
         "sudo apt install nodejs -y",
+
 
         "sudo apt-get update",
         "sudo apt install git -y",
@@ -75,9 +80,48 @@ provisioner "remote-exec" {
         "sudo java -jar jenkins-cli.jar -auth devops:admin123 -s http://localhost:8080/ install-plugin mailer",
         "sudo java -jar jenkins-cli.jar -auth devops:admin123 -s http://localhost:8080/ install-plugin configuration-as-code",
 
+
+        //Setup Job
+        //"sudo git clone https://github.com/Oni22/lecture-devops-app.git",
+        //"sudo mkdir /var/lib/jenkins/jobs/devops",
+
+        //"sudo cp -r lecture-devops-app/jenkins/config.xml /var/lib/jenkins/jobs/devops",
+        //"sudo rm -R lecture-devops-app",
+
+        //Install Docker
+        "sudo apt-get update",
+        "sudo apt install apt-transport-https ca-certificates curl software-properties-common -y",
+        "curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -",
+        "sudo add-apt-repository \"deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable\"",
+        "sudo apt-get update",
+        "sudo apt-cache policy docker-ce",
+        "sudo apt install docker-ce -y",
+
+        //Install Docker Compose
+        "sudo curl -L \"https://github.com/docker/compose/releases/download/1.26.2/docker-compose-$(uname -s)-$(uname -m)\" -o /usr/local/bin/docker-compose",
+        "sudo chmod +x /usr/local/bin/docker-compose",
+
         // Give jenkis rights to use docker
         "sudo usermod -aG docker jenkins",
         "sudo systemctl restart jenkins",
+
+
+
+        //TODO: Setup Webhook
+
+        //TODO: Setup Pipeline
+
+        //TODO: Monitoring
+
+        "sudo apt-get install monit -y",
+
+        "echo 'set httpd port 2812 \n use address $(ip route get 1.2.3.4 | awk '{print $7}')  \n allow 0.0.0.0/0.0.0.0 \n allow admin:monit' >> /etc/monit/monitrc",
+
+        "monit",
+
+        //TODO: HTTPS
+
+
         
 
 
