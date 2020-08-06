@@ -19,10 +19,12 @@ resource "digitalocean_droplet" "web1" {
 provisioner "remote-exec" {
     inline =[
 
+      "ip4=$(ip route get 1.2.3.4 | awk '{print $7}')",
+
       //Install basics
         "sudo apt-get update",
         "sudo apt install npm -y",
-
+               
       //TODO: Install nodeJS > 10.0
         //"sudo apt-get update",
         //"sudo apt install nodejs:10 -y",
@@ -40,6 +42,19 @@ provisioner "remote-exec" {
 
         "sudo apt update",
         "sudo apt install openjdk-8-jdk -y",
+
+        //Install Docker
+        "sudo apt-get update",
+        "sudo apt install apt-transport-https ca-certificates curl software-properties-common -y",
+        "curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -",
+        "sudo add-apt-repository \"deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable\"",
+        "sudo apt-get update",
+        "sudo apt-cache policy docker-ce",
+        "sudo apt install docker-ce -y",
+
+        //Install Docker Compose
+        "sudo curl -L \"https://github.com/docker/compose/releases/download/1.26.2/docker-compose-$(uname -s)-$(uname -m)\" -o /usr/local/bin/docker-compose",
+        "sudo chmod +x /usr/local/bin/docker-compose",
 
         //Install Jenkins
         "wget -q -O - https://pkg.jenkins.io/debian-stable/jenkins.io.key | sudo apt-key add -",
@@ -88,36 +103,19 @@ provisioner "remote-exec" {
         //"sudo cp -r lecture-devops-app/jenkins/config.xml /var/lib/jenkins/jobs/devops",
         //"sudo rm -R lecture-devops-app",
 
-        //Install Docker
-        "sudo apt-get update",
-        "sudo apt install apt-transport-https ca-certificates curl software-properties-common -y",
-        "curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -",
-        "sudo add-apt-repository \"deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable\"",
-        "sudo apt-get update",
-        "sudo apt-cache policy docker-ce",
-        "sudo apt install docker-ce -y",
-
-        //Install Docker Compose
-        "sudo curl -L \"https://github.com/docker/compose/releases/download/1.26.2/docker-compose-$(uname -s)-$(uname -m)\" -o /usr/local/bin/docker-compose",
-        "sudo chmod +x /usr/local/bin/docker-compose",
-
         // Give jenkis rights to use docker
         "sudo usermod -aG docker jenkins",
         "sudo systemctl restart jenkins",
-
-
 
         //TODO: Setup Webhook
 
         //TODO: Setup Pipeline
 
-        //TODO: Monitoring
-
+        //Monitoring
         "sudo apt-get install monit -y",
-
-        "echo 'set httpd port 2812 \n use address $(ip route get 1.2.3.4 | awk '{print $7}')  \n allow 0.0.0.0/0.0.0.0 \n allow admin:monit' >> /etc/monit/monitrc",
-
         "monit",
+        "echo 'set httpd port 2812 \n use address' $(ip route get 1.2.3.4 | awk '{print $7}') '\n allow 0.0.0.0/0.0.0.0 \n allow admin:monit' >> /etc/monit/monitrc",
+        "monit reload"
 
         //TODO: HTTPS
 
