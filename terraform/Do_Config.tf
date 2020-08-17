@@ -145,7 +145,7 @@ provisioner "remote-exec" {
        #"sudo apt-get install certbot python3-certbot-apache",
        #"sudo certbot --apache",
 
-        "rm -R JenkinsJobCreation",
+
 
     ]
 }
@@ -153,13 +153,14 @@ provisioner "remote-exec" {
 provisioner "remote-exec" {
 
     inline =[
-
         //Setup Jenkins Job
         "sudo git clone https://github.com/RufusGladiuz/JenkinsJobCreation",
         "cd JenkinsJobCreation/",
         "sudo python3 jenkinsConfig.py devops admin123 Todo-App $(cat ../githubrepo.txt)",
         "cd ..",
+        "rm -R JenkinsJobCreation",
 
-    ]}
+    ]
+}
 
 }
