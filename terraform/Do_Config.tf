@@ -65,7 +65,6 @@ provisioner "remote-exec" {
         //Install relevant python packages
         "sudo apt-get install python3-pip -y",
         "sudo python3 -m pip install python-jenkins",
-        "sudo python3 -m pip install kerberos",
         
         //Install Docker
         "sudo apt-get update",
@@ -123,11 +122,7 @@ provisioner "remote-exec" {
         "sudo java -jar jenkins-cli.jar -auth devops:admin123 -s http://localhost:8080/ install-plugin configuration-as-code",
         //"sudo java -jar jenkins-cli.jar -auth devops:admin123 -s http://localhost:8080/ install-plugin configuration-as-code-support",
 
-        //Setup Jenkins Job
-        "sudo git clone https://github.com/RufusGladiuz/JenkinsJobCreation",
-        "cd JenkinsJobCreation/",
-        "sudo python3 jenkinsConfig.py devops admin123 Todo-App $(cat ../githubrepo.txt)",
-        "cd ..",
+
 
         // Give jenkis rights to use docker
         "sudo usermod -aG docker jenkins",
@@ -154,5 +149,17 @@ provisioner "remote-exec" {
 
     ]
 }
+
+provisioner "remote-exec" {
+
+    inline =[
+
+        //Setup Jenkins Job
+        "sudo git clone https://github.com/RufusGladiuz/JenkinsJobCreation",
+        "cd JenkinsJobCreation/",
+        "sudo python3 jenkinsConfig.py devops admin123 Todo-App $(cat ../githubrepo.txt)",
+        "cd ..",
+
+    ]}
 
 }
