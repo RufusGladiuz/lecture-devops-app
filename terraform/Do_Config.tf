@@ -1,6 +1,6 @@
-resource "digitalocean_droplet" "web2" {
+resource "digitalocean_droplet" "web1" {
   image = "ubuntu-18-04-x64"
-  name = "DevOpsSoSe20202"
+  name = "DevOpsSoSe2020"
   region = "FRA1"
   size = "2GB"
   private_networking = false
@@ -36,7 +36,7 @@ provisioner "remote-exec" {
     inline =[
       //Install webserver
       "sudo apt-get update",
-      "sudo apt install nginx",
+      "sudo apt install nginx -y",
 
       "rm -r  /etc/nginx/sites-available/default",
       "cp default /etc/nginx/sites-available/",
@@ -63,9 +63,10 @@ provisioner "remote-exec" {
         "sudo apt install openjdk-8-jdk -y",
 
         //Install relevant python packages
-        "sudo apt-get install python3-pip -y"
-        "sudo python3 -m pip install python-jenkins"
-
+        "sudo apt-get install python3-pip -y",
+        "sudo python3 -m pip install python-jenkins",
+        "sudo python3 -m pip install kerberos",
+        
         //Install Docker
         "sudo apt-get update",
         "sudo apt install apt-transport-https ca-certificates curl software-properties-common -y",
@@ -120,22 +121,19 @@ provisioner "remote-exec" {
         "sudo java -jar jenkins-cli.jar -auth devops:admin123 -s http://localhost:8080/ install-plugin email-ext",
         "sudo java -jar jenkins-cli.jar -auth devops:admin123 -s http://localhost:8080/ install-plugin mailer",
         "sudo java -jar jenkins-cli.jar -auth devops:admin123 -s http://localhost:8080/ install-plugin configuration-as-code",
-        "sudo java -jar jenkins-cli.jar -auth devops:admin123 -s http://localhost:8080/ install-plugin configuration-as-code-support",
+        //"sudo java -jar jenkins-cli.jar -auth devops:admin123 -s http://localhost:8080/ install-plugin configuration-as-code-support",
 
         //Setup Jenkins Job
         "sudo git clone https://github.com/RufusGladiuz/JenkinsJobCreation",
         "cd JenkinsJobCreation/",
-        "python3 jenkinsConfig.py devops admin123 Todo-App $(cat ../githubrepo.txt)",
-        "cd .."
-        "rm -R JenkinsJobCreation"
-        
+        "sudo python3 jenkinsConfig.py devops admin123 Todo-App $(cat ../githubrepo.txt)",
+        "cd ..",
+
         // Give jenkis rights to use docker
         "sudo usermod -aG docker jenkins",
         "sudo systemctl restart jenkins",
 
         //TODO: Setup Webhook
-
-        //TODO: Setup Pipeline
 
         //Monitoring
         "sudo apt-get install monit -y",
@@ -144,14 +142,16 @@ provisioner "remote-exec" {
         "monit reload",
 
         //TODO: HTTPS
-       "sudo apt-get update",
-       "sudo apt-get install software-properties-common",
-       "sudo add-apt-repository universe",
-       "sudo add-apt-repository ppa:certbot/certbot",
-       "sudo apt-get update",
-       "sudo apt-get install certbot python3-certbot-apache",
-       "sudo certbot --apache",
-      
+       //"sudo apt-get update",
+       //"sudo apt-get install software-properties-common",
+       #"sudo add-apt-repository universe",
+       #"sudo add-apt-repository ppa:certbot/certbot",
+       #"sudo apt-get update",
+       #"sudo apt-get install certbot python3-certbot-apache",
+       #"sudo certbot --apache",
+
+        "rm -R JenkinsJobCreation",
+
     ]
 }
 
