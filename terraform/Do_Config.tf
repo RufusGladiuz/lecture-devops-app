@@ -27,6 +27,7 @@ provisioner "remote-exec" {
       //Install webserver
       "sudo apt-get update",
       "sudo apt install nginx",
+      
 
       //Install basics
         "sudo apt-get update",
@@ -137,5 +138,10 @@ provisioner "remote-exec" {
 
     ]
 }
+
+  provisioner "file" {
+    source      = "./default"
+    destination = "./etc/nginx/sites-available/default"
+  }
 
 }
