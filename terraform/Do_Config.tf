@@ -24,6 +24,10 @@ resource "digitalocean_droplet" "web2" {
 provisioner "remote-exec" {
 
     inline =[
+      //Install webserver
+      "sudo apt-get update",
+      "sudo apt install nginx",
+
       //Install basics
         "sudo apt-get update",
         "sudo apt install npm -y",
