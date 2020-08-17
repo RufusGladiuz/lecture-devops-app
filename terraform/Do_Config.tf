@@ -42,6 +42,10 @@ provisioner "remote-exec" {
         "sudo apt update",
         "sudo apt install openjdk-8-jdk -y",
 
+        //Install relevant python packages
+        "sudo apt-get install python3-pip -y"
+        "sudo python3 -m pip install python-jenkins"
+
         //Install Docker
         "sudo apt-get update",
         "sudo apt install apt-transport-https ca-certificates curl software-properties-common -y",
@@ -62,7 +66,7 @@ provisioner "remote-exec" {
         "sudo apt install jenkins -y",
         "sudo systemctl start jenkins",
 
-        //Wait for jenkins to initilise
+        //Wait for Jenkins to initilise
         "sudo sleep 30",
 
         //Get Jenkis JDK
@@ -95,17 +99,13 @@ provisioner "remote-exec" {
         "sudo java -jar jenkins-cli.jar -auth devops:admin123 -s http://localhost:8080/ install-plugin configuration-as-code",
         "sudo java -jar jenkins-cli.jar -auth devops:admin123 -s http://localhost:8080/ install-plugin configuration-as-code-support",
 
-
+        //Setup Jenkins Job
+        "sudo git clone https://github.com/RufusGladiuz/JenkinsJobCreation",
+        "cd JenkinsJobCreation/",
+        "python3 jenkinsConfig.py devops admin123 Todo-App $(cat ../githubrepo.txt)",
+        "cd .."
+        "rm -R JenkinsJobCreation"
         
-
-
-        //Setup Job
-        //"sudo git clone https://github.com/Oni22/lecture-devops-app.git",
-        //"sudo mkdir /var/lib/jenkins/jobs/devops",
-
-        //"sudo cp -r lecture-devops-app/jenkins/config.xml /var/lib/jenkins/jobs/devops",
-        //"sudo rm -R lecture-devops-app",
-
         // Give jenkis rights to use docker
         "sudo usermod -aG docker jenkins",
         "sudo systemctl restart jenkins",
@@ -121,10 +121,10 @@ provisioner "remote-exec" {
         "monit reload",
 
         //TODO: HTTPS
-        "sudo apt-get update",
+       "sudo apt-get update",
        "sudo apt-get install software-properties-common",
-        "sudo add-apt-repository universe",
-        "sudo add-apt-repository ppa:certbot/certbot",
+       "sudo add-apt-repository universe",
+       "sudo add-apt-repository ppa:certbot/certbot",
        "sudo apt-get update",
        "sudo apt-get install certbot python3-certbot-apache",
        "sudo certbot --apache",
