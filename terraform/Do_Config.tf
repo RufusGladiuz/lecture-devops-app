@@ -21,13 +21,28 @@ resource "digitalocean_droplet" "web2" {
     destination = "./githubrepo.txt"
   }
 
+  provisioner "file" {
+    source      = "./default"
+    destination = "./default"
+  }
+
+   provisioner "file" {
+    source      = "./jenkins"
+    destination = "./jenkins"
+  }
+
 provisioner "remote-exec" {
 
     inline =[
       //Install webserver
       "sudo apt-get update",
       "sudo apt install nginx",
-      
+
+      "rm -r  /etc/nginx/sites-available/default",
+      "cp default /etc/nginx/sites-available/",
+      "sudo service nginx restart",
+
+      "sudo sleep 5",
 
       //Install basics
         "sudo apt-get update",
@@ -69,7 +84,10 @@ provisioner "remote-exec" {
         "sudo sh -c 'echo deb http://pkg.jenkins-ci.org/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'",
         "sudo apt update",
         "sudo apt install jenkins -y",
+        "rm -r  /etc/default/jenkins",
+        "cp jenkins /etc/default/",
         "sudo systemctl start jenkins",
+
 
         //Wait for Jenkins to initilise
         "sudo sleep 30",
@@ -133,15 +151,8 @@ provisioner "remote-exec" {
        "sudo apt-get update",
        "sudo apt-get install certbot python3-certbot-apache",
        "sudo certbot --apache",
-
-
-
+      
     ]
 }
-
-  provisioner "file" {
-    source      = "./default"
-    destination = "./etc/nginx/sites-available/default"
-  }
 
 }
