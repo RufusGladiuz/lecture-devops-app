@@ -38,10 +38,6 @@ provisioner "remote-exec" {
       "sudo apt-get update",
       "sudo apt install nginx -y",
 
-      "rm -r  /etc/nginx/sites-available/default",
-      "cp default /etc/nginx/sites-available/",
-      "sudo service nginx restart",
-
       "sudo sleep 5",
 
       //Install basics
@@ -135,6 +131,10 @@ provisioner "remote-exec" {
         "monit",
         "echo 'set httpd port 2812 \n use address' $(ip route get 1.2.3.4 | awk '{print $7}') '\n allow 0.0.0.0/0.0.0.0 \n allow admin:monit' >> /etc/monit/monitrc",
         "monit reload",
+
+        "rm -r /etc/nginx/sites-available/default",
+        "cp default /etc/nginx/sites-available/",
+        "sudo service nginx restart",
 
         //TODO: HTTPS
        //"sudo apt-get update",
