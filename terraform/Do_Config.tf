@@ -1,6 +1,6 @@
-resource "digitalocean_droplet" "web1" {
+resource "digitalocean_droplet" "web2" {
   image = "ubuntu-18-04-x64"
-  name = "DevOpsSoSe2012"
+  name = "DevOpsSoSe20202"
   region = "FRA1"
   size = "2GB"
   private_networking = false
@@ -16,19 +16,18 @@ resource "digitalocean_droplet" "web1" {
     agent = false
   }
 
+  provisioner "file" {
+    source      = "./githubrepo.txt"
+    destination = "./githubrepo.txt"
+  }
+
 provisioner "remote-exec" {
+
     inline =[
-
-      "ip4=$(ip route get 1.2.3.4 | awk '{print $7}')",
-
       //Install basics
         "sudo apt-get update",
         "sudo apt install npm -y",
                
-      //TODO: Install nodeJS > 10.0
-        //"sudo apt-get update",
-        //"sudo apt install nodejs:10 -y",
-
         "sudo curl -sL https://deb.nodesource.com/setup_10.x -o nodesource_setup.sh",
         "sudo bash nodesource_setup.sh",
         "sudo apt install nodejs -y",
@@ -94,6 +93,10 @@ provisioner "remote-exec" {
         "sudo java -jar jenkins-cli.jar -auth devops:admin123 -s http://localhost:8080/ install-plugin email-ext",
         "sudo java -jar jenkins-cli.jar -auth devops:admin123 -s http://localhost:8080/ install-plugin mailer",
         "sudo java -jar jenkins-cli.jar -auth devops:admin123 -s http://localhost:8080/ install-plugin configuration-as-code",
+        "sudo java -jar jenkins-cli.jar -auth devops:admin123 -s http://localhost:8080/ install-plugin configuration-as-code-support",
+
+
+        
 
 
         //Setup Job
@@ -115,54 +118,16 @@ provisioner "remote-exec" {
         "sudo apt-get install monit -y",
         "monit",
         "echo 'set httpd port 2812 \n use address' $(ip route get 1.2.3.4 | awk '{print $7}') '\n allow 0.0.0.0/0.0.0.0 \n allow admin:monit' >> /etc/monit/monitrc",
-        "monit reload"
+        "monit reload",
 
         //TODO: HTTPS
-
-
-        
-
-
-        
-
-        
-
-        
-
-        
-        
-
-            
-
-
-        
-
-
-        
-
-
-        
-
-        
-
-        
-        //"sudo java -jar jenkins-cli.jar -auth devops:admin123 -s http://localhost:8080/ install-plugin configuration-as-code"
-
-       //Set up python and relevant packages
-        //"sudo apt update",
-        //"sudo apt install python3.8 -y",
-        //"sudo apt update",
-        //"apt install python3-pip -y",
-        //"python3 -m pip install jenkinsapi",
-
-        //TODO: ADD Docker
-        //TODO: ADD Docker Compose
-        //TODO: Impliment monitor software of choice
-
-        //TODO: Hand docker user rights to jenkins
-        //TODO: Restart jenkins
-
-
+        "sudo apt-get update",
+       "sudo apt-get install software-properties-common",
+        "sudo add-apt-repository universe",
+        "sudo add-apt-repository ppa:certbot/certbot",
+       "sudo apt-get update",
+       "sudo apt-get install certbot python3-certbot-apache",
+       "sudo certbot --apache",
 
 
 
