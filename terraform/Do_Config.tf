@@ -34,9 +34,7 @@ resource "digitalocean_droplet" "web1" {
 provisioner "remote-exec" {
 
     inline =[
-      //Install webserver
-      "sudo apt-get update",
-      "sudo apt install nginx -y",
+
 
       "sudo sleep 5",
 
@@ -80,16 +78,15 @@ provisioner "remote-exec" {
         "sudo sh -c 'echo deb http://pkg.jenkins-ci.org/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'",
         "sudo apt update",
         "sudo apt install jenkins -y",
-        "rm -r  /etc/default/jenkins",
-        "cp jenkins /etc/default/",
         "sudo systemctl start jenkins",
-
 
         //Wait for Jenkins to initilise
         "sudo sleep 30",
+        
+        "sudo ufw allow 8080",
 
         //Get Jenkis JDK
-        "sudo wget http://`ip route get 1.2.3.4 | awk '{print $7}'`:8080/jnlpJars/jenkins-cli.jar",
+        "sudo wget http://${digitalocean_droplet.web1.ipv4_address}:8080/jnlpJars/jenkins-cli.jar",
 
         //Create jenkins user
         "sudo echo 'jenkins.model.Jenkins.instance.securityRealm.createAccount(\"devops\", \"admin123\")' | java -jar jenkins-cli.jar -auth admin:`cat /var/lib/jenkins/secrets/initialAdminPassword` -s http://localhost:8080/ groovy =",
@@ -119,22 +116,19 @@ provisioner "remote-exec" {
         //"sudo java -jar jenkins-cli.jar -auth devops:admin123 -s http://localhost:8080/ install-plugin configuration-as-code-support",
 
 
-
         // Give jenkis rights to use docker
         "sudo usermod -aG docker jenkins",
         "sudo systemctl restart jenkins",
-
+        "sudo sleep 30",
         //TODO: Setup Webhook
 
         //Monitoring
         "sudo apt-get install monit -y",
         "monit",
-        "echo 'set httpd port 2812 \n use address' $(ip route get 1.2.3.4 | awk '{print $7}') '\n allow 0.0.0.0/0.0.0.0 \n allow admin:monit' >> /etc/monit/monitrc",
+        "echo 'set httpd port 2812 \n use address' ${digitalocean_droplet.web1.ipv4_address} '\n allow 0.0.0.0/0.0.0.0 \n allow admin:monit' >> /etc/monit/monitrc",
         "monit reload",
 
-        "rm -r /etc/nginx/sites-available/default",
-        "cp default /etc/nginx/sites-available/",
-        "sudo service nginx restart",
+
 
         //TODO: HTTPS
        //"sudo apt-get update",
@@ -146,7 +140,6 @@ provisioner "remote-exec" {
        #"sudo certbot --apache",
 
 
-
     ]
 }
 
@@ -154,13 +147,28 @@ provisioner "remote-exec" {
 
     inline =[
         //Setup Jenkins Job
-        "sudo git clone https://github.com/RufusGladiuz/JenkinsJobCreation",
+        "sudo git clone https://github.com/RufusGladiuz/JenkinsJobCreation.git",
         "cd JenkinsJobCreation/",
         "sudo python3 jenkinsConfig.py devops admin123 Todo-App $(cat ../githubrepo.txt)",
         "cd ..",
         "rm -R JenkinsJobCreation",
+    ]
+}
+
+provisioner "remote-exec" {
+
+    inline =[
+      //Install webserver
+      "sudo apt-get update",
+      "sudo apt install nginx -y",
+      "rm -r  /etc/default/jenkins",
+      "cp jenkins /etc/default/",
+      "rm -r /etc/nginx/sites-available/default",
+      "cp default /etc/nginx/sites-available/",
+      "sudo service nginx restart",
 
     ]
 }
+
 
 }
