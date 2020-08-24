@@ -17,11 +17,6 @@ resource "digitalocean_droplet" "web1" {
   }
 
   provisioner "file" {
-    source      = "./githubrepo.txt"
-    destination = "./githubrepo.txt"
-  }
-
-  provisioner "file" {
     source      = "./default"
     destination = "./default"
   }
@@ -59,7 +54,8 @@ provisioner "remote-exec" {
         //Install relevant python packages
         "sudo apt-get install python3-pip -y",
         "sudo python3 -m pip install python-jenkins",
-        
+        "sudo python3 -m pip install PyGithub",
+
         //Install Docker
         "sudo apt-get update",
         "sudo apt install apt-transport-https ca-certificates curl software-properties-common -y",
@@ -82,7 +78,6 @@ provisioner "remote-exec" {
 
         //Wait for Jenkins to initilise
         "sudo sleep 30",
-        
         "sudo ufw allow 8080",
 
         //Get Jenkis JDK
@@ -128,9 +123,7 @@ provisioner "remote-exec" {
         "echo 'set httpd port 2812 \n use address' ${digitalocean_droplet.web1.ipv4_address} '\n allow 0.0.0.0/0.0.0.0 \n allow admin:monit' >> /etc/monit/monitrc",
         "monit reload",
 
-
-
-        //TODO: HTTPS
+       //TODO: HTTPS
        //"sudo apt-get update",
        //"sudo apt-get install software-properties-common",
        #"sudo add-apt-repository universe",
@@ -149,7 +142,8 @@ provisioner "remote-exec" {
         //Setup Jenkins Job
         "sudo git clone https://github.com/RufusGladiuz/JenkinsJobCreation.git",
         "cd JenkinsJobCreation/",
-        "sudo python3 jenkinsConfig.py devops admin123 Todo-App $(cat ../githubrepo.txt)",
+        "sudo python3 jenkinsConfig.py devops admin123 Todo-App ${var.githubRepo}",
+        "sudo python3 ${var.githubRepo} ${var.githubAccessToken}",
         "cd ..",
         "rm -R JenkinsJobCreation",
     ]
@@ -166,7 +160,6 @@ provisioner "remote-exec" {
       "rm -r /etc/nginx/sites-available/default",
       "cp default /etc/nginx/sites-available/",
       "sudo service nginx restart",
-
     ]
 }
 
