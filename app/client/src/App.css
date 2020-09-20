@@ -16,7 +16,7 @@ body{
 }
 
 :root {
-    --themeForeColor: rgb(255, 78, 78);
+    --themeForeColor: rgb(20, 255, 78);
     --themeOutlineColor: rgb(20, 20, 93);
     --themeHeaderColor: white;
     --silver:#d9d7d7;
